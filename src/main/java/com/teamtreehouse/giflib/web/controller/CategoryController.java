@@ -1,6 +1,12 @@
 package com.teamtreehouse.giflib.web.controller;
 
+import com.sun.prism.j2d.paint.MultipleGradientPaint;
 import com.teamtreehouse.giflib.model.Category;
+import com.teamtreehouse.giflib.service.CategoryService;
+import com.teamtreehouse.giflib.web.Color;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,13 +18,15 @@ import java.util.List;
 
 @Controller
 public class CategoryController {
+    @Autowired
+    CategoryService categoryService;
 
     // Index of all categories
+    @SuppressWarnings("unchecked")
     @RequestMapping("/categories")
     public String listCategories(Model model) {
         // TODO: Get all categories
-        List<Category> categories = new ArrayList<>();
-
+        List<Category> categories = categoryService.findAll();
         model.addAttribute("categories",categories);
         return "category/index";
     }
@@ -37,7 +45,8 @@ public class CategoryController {
     @RequestMapping("categories/add")
     public String formNewCategory(Model model) {
         // TODO: Add model attributes needed for new form
-
+        model.addAttribute("category",new Category());
+        model.addAttribute("colors", Color.values());
         return "category/form";
     }
 
@@ -60,11 +69,11 @@ public class CategoryController {
 
     // Add a category
     @RequestMapping(value = "/categories", method = RequestMethod.POST)
-    public String addCategory() {
+    public String addCategory(Category category) {
         // TODO: Add category if valid data was received
-
+            categoryService.add(category);
         // TODO: Redirect browser to /categories
-        return null;
+        return "redirect:/categories";
     }
 
     // Delete an existing category
