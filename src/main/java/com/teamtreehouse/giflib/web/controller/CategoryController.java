@@ -4,6 +4,7 @@ import com.sun.prism.j2d.paint.MultipleGradientPaint;
 import com.teamtreehouse.giflib.model.Category;
 import com.teamtreehouse.giflib.service.CategoryService;
 import com.teamtreehouse.giflib.web.Color;
+import com.teamtreehouse.giflib.web.FlashMessage;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,9 +80,11 @@ public class CategoryController {
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("category",category);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.category",result);
+            redirectAttributes.addFlashAttribute("flash",new FlashMessage("Category Failed to add,Enter Valid Data", FlashMessage.Status.FAILURE));
             return "redirect:/categories/add";
         }
-            categoryService.add(category);
+        categoryService.add(category);
+        redirectAttributes.addFlashAttribute("flash",new FlashMessage("Category successfully added!", FlashMessage.Status.SUCCESS));
         // TODO: Redirect browser to /categories
         return "redirect:/categories";
     }

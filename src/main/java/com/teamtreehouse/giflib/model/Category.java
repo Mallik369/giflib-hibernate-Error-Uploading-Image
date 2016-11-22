@@ -14,10 +14,10 @@ public class Category {
     private Long id;
 
     @NotNull
-    @Size(min = 3 , max = 15)
+    @Size(min = 3 , max = 15 , message = "{category.name.size}")
     private String name;
 
-    @NotNull
+    @NotNull(message = "{category.colorCode.notnull}")
     @Pattern(regexp = "#[0-9a-fA-F]{6}")
     private String colorCode;
 
